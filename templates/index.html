@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EquityValuator Pro | Análisis Fundamental</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta de colores para dark mode */
+            --primary-blue: #3b82f6;
+            --deep-blue: #2563eb;
+            --slate-900: #0c4a6e;
+            --slate-700: #334155;
+            --emerald-500: #059669;
+            --rose-500: #f43f5e;
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #262626;
+            --text-primary: #ffffff;
+            --text-secondary: #baaaf5;
+        }
+
+        /* Estilos globales */
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, #212121 100%);
+            min-height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Contenedor principal */
+        .glass-container {
+            background: rgba(42, 42, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            padding: 3rem;
+            margin: 2rem auto;
+            max-width: 640px;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-container:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Encabezado */
+        .pro-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .pro-header h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: var(--slate-900);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .pro-header p {
+            font-size: 1.125rem;
+            color: var(--slate-700);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Tarjeta de análisis */
+        .analysis-card {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border: 1px solid #444444;
+        }
+
+        .ticker-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .ticker-symbol {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.025em;
+        }
+
+        .status-badge {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-undervalued {
+            background: linear-gradient(135deg, #155e39, #0a3d23);
+        }
+
+        .status-overvalued {
+            background: linear-gradient(135deg, #a01a1a, #5e0808);
+        }
+
+        /* Formulario */
+        .pro-input-group {
+            margin: 2rem 0;
+        }
+
+        .pro-input {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            background: #333333;
+            color: var(--text-primary);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .pro-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+
+        .pro-button {
+            background: linear-gradient(135deg, var(--primary-blue), var(--deep-blue));
+            color: white;
+            padding: 1.2rem 2.4rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .pro-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Tarjeta de error */
+        .error-card {
+            background: #2a2a2a;
+            border: 1px solid #ff4b4b;
+            color: #ff4b4b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            font-weight: 500;
+        }
+
+        /* Pie de página */
+        .watermark {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #444444;
+        }
+
+        /* Tema noche */
+        [data-bs-theme="dark"] {
+            --slate-900: #ffffff;
+            --slate-700: #d3d3d3;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark">
+    <div class="glass-container">
+        <div class="pro-header">
+            <h1>EquityValuator Pro</h1>
+            <p>Análisis cuantitativo de valoración por dividendos</p>
+        </div>
+
+        {% if ticker and status %}
+        <div class="analysis-card">
+            <div class="ticker-display">
+                <div>
+                    <div class="text-sm text-slate-500">Ticker analizado</div>
+                    <div class="ticker-symbol">{{ ticker }}</div>
+                </div>
+                <div class="status-badge {% if 'infravalorado' in status.lower() %}status-undervalued{% else %}status-overvalued{% endif %}">
+                    {{ status }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="pro-input-group">
+                <input type="text" 
+                       class="pro-input" 
+                       name="ticker" 
+                       placeholder="Ingrese símbolo bursátil (Ej: AAPL, MSFT)"
+                       required>
+            </div>
+            <button type="submit" class="pro-button">
+                Ejecutar análisis
+            </button>
+        </form>
+
+        {% if error %}
+        <div class="error-card">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="watermark">
+            © 2025 EquityValuator Pro · Todos los derechos reservados
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
