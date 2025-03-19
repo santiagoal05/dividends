@@ -3,155 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis de {{ ticker }}</title>
-    <!-- Bootstrap 5 CSS (modo oscuro) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Estilos personalizados (dark mode) -->
-    <style>
-        body {
-            background-color: #1a1a1a;
-            color: #ffffff;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
+    <title>Análisis de {{ ticker }} | EquityValuator Pro</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 2rem;
-            text-align: center;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .status-box {
-            background-color: #2d2d2d;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        .ticker-label {
-            font-size: 1.1rem;
-            color: #aaaaaa;
-            margin-bottom: 0.5rem;
-        }
-        .status-text {
-            font-size: 1.6rem;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-        .status-text strong {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-        }
-        .bg-primary { background-color: #2a52be; }
-        .bg-danger { background-color: #c0392b; }
-        .bg-success { background-color: #27ae60; }
-        .plotly-graph-container {
-            background-color: #2d2d2d;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        .input-group {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .form-control {
-            background-color: #333333;
-            border: 1px solid #444444;
-            color: #ffffff;
-            border-radius: 8px;
-            font-size: 1rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        .btn-primary {
-            background-color: #2a52be;
-            border: none;
-            border-radius: 8px;
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: transform 0.2s, opacity 0.2s;
-        }
-        .btn-primary:hover {
-            background-color: #23499f;
-            transform: translateY(-2px);
-            opacity: 0.95;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 2rem;
-            color: #aaaaaa;
-            font-size: 0.9rem;
-        }
-    </style>
+    </script>
 </head>
-<body data-bs-theme="dark">
-    <div class="container">
-        <h1>Resultado del Análisis de {{ ticker }}</h1>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white font-sans dark">
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white text-center mb-4 sm:mb-6 md:mb-8 drop-shadow-md">Análisis de {{ ticker }}</h1>
         
         <!-- Estado Actual y Ticker Analizado -->
-        <div class="row">
-            <div class="col-12">
-                <div class="status-box">
-                    <p class="ticker-label">Ticker Analizado:</p>
-                    <p class="status-text">{{ ticker }}</p>
-                    <p class="ticker-label">Estado Actual:</p>
-                    <p class="status-text">
-                        <strong class="bg-{% if 'infravalorado' in status.lower() %}primary{% elif 'sobrevalorado' in status.lower() %}danger{% else %}success{% endif %}">
+        <div class="mb-4 sm:mb-6 md:mb-8">
+            <div class="bg-gray-800/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-8 shadow-lg border border-gray-700/50">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4 md:gap-6">
+                    <div class="text-center md:text-left">
+                        <p class="text-xs sm:text-sm text-gray-400 mb-1">Ticker Analizado</p>
+                        <p class="text-2xl sm:text-3xl font-bold tracking-tight text-white">{{ ticker }}</p>
+                    </div>
+                    <div class="text-center md:text-right mt-2 md:mt-0">
+                        <p class="text-xs sm:text-sm text-gray-400 mb-1">Estado Actual</p>
+                        <span class="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-semibold text-white {% if 'infravalorado' in status.lower() %}bg-gradient-to-r from-emerald-800 to-emerald-900 border-emerald-700{% elif 'sobrevalorado' in status.lower() %}bg-gradient-to-r from-red-800 to-red-900 border-red-700{% else %}bg-gradient-to-r from-blue-800 to-blue-900 border-blue-700{% endif %} border border-opacity-20">
                             {{ status }}
-                        </strong>
-                    </p>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Gráfico 1: Canales de Dividendos -->
-        <div class="row">
-            <div class="col-12">
-                <div id="graph1" class="plotly-graph-container">
+        <div class="mb-4 sm:mb-6 md:mb-8">
+            <div class="bg-gray-800/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-gray-700/50">
+                <h2 class="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-4">Canales de Dividendos</h2>
+                <div id="graph1" class="w-full h-[400px] sm:h-[500px] md:h-[600px] rounded-lg overflow-hidden">
                     {{ plot1 | safe }}
                 </div>
             </div>
         </div>
 
         <!-- Gráfico 2: Bandas de Valoración -->
-        <div class="row">
-            <div class="col-12">
-                <div id="graph2" class="plotly-graph-container">
+        <div class="mb-4 sm:mb-6 md:mb-8">
+            <div class="bg-gray-800/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-gray-700/50">
+                <h2 class="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-4">Bandas de Valoración</h2>
+                <div id="graph2" class="w-full h-[400px] sm:h-[500px] md:h-[600px] rounded-lg overflow-hidden">
                     {{ plot2 | safe }}
                 </div>
             </div>
         </div>
 
         <!-- Formulario para nuevo análisis -->
-        <div class="row">
-            <div class="col-12">
-                <form method="POST">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="ticker" 
-                               placeholder="Ingresar otro ticker (ej. AAPL)" required>
-                        <button class="btn btn-primary" type="submit">Analizar</button>
+        <div class="mb-4 sm:mb-6 md:mb-8">
+            <div class="bg-gray-800/90 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-lg border border-gray-700/50">
+                <h2 class="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-4">Analizar otro ticker</h2>
+                <form method="POST" class="max-w-md mx-auto">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input type="text" class="flex-1 px-3 sm:px-4 py-2 sm:py-3 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200" 
+                               name="ticker" placeholder="Ingresar ticker (ej. AAPL)" required>
+                        <button class="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold rounded-lg shadow-md hover:translate-y-[-1px] sm:hover:translate-y-[-2px] hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50" 
+                                type="submit">Analizar</button>
                     </div>
                 </form>
             </div>
         </div>
 
         <!-- Footer -->
-        <div class="footer">
-            <p>© 2025 Análisis de Dividendos. Todos los derechos reservados.</p>
+        <div class="text-center text-gray-400 text-xs sm:text-sm mt-6 sm:mt-8 md:mt-12 pt-3 sm:pt-4 md:pt-6 border-t border-gray-700">
+            <p>© 2025 EquityValuator Pro. Todos los derechos reservados.</p>
         </div>
     </div>
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
