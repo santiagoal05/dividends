@@ -62,24 +62,28 @@ def calculate_dividend_channels(ticker):
         fig.add_hline(
             y=avg_high, 
             line_dash="dash", 
-            line_color="#2c3e50",
+            line_color="#38bdf8",
+            line_width=2,
             annotation_text=f"Top 10%: {avg_high:.1f}%", 
-            annotation_position="bottom right"
+            annotation_position="bottom right",
+            annotation=dict(font=dict(color='#38bdf8', size=12))
         )
         fig.add_hline(
             y=avg_low, 
             line_dash="dash", 
-            line_color="#c0392b",
+            line_color="#f87171",
+            line_width=2,
             annotation_text=f"Low 10%: {avg_low:.1f}%", 
-            annotation_position="top right"
+            annotation_position="top right",
+            annotation=dict(font=dict(color='#f87171', size=12))
         )
         fig.add_vrect(
             x0=hist.index.min(), 
             x1=hist.index.max(), 
             y0=avg_high, 
             y1=100,
-            fillcolor="#2c3e50", 
-            opacity=0.1, 
+            fillcolor="#38bdf8", 
+            opacity=0.15, 
             layer="below"
         )
         fig.add_vrect(
@@ -87,18 +91,29 @@ def calculate_dividend_channels(ticker):
             x1=hist.index.max(), 
             y0=0, 
             y1=avg_low,
-            fillcolor="#c0392b", 
-            opacity=0.1, 
+            fillcolor="#f87171", 
+            opacity=0.15, 
             layer="below"
         )
         fig.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='#ecf0f1',
+            plot_bgcolor='rgba(20,20,20,0.3)',
+            paper_bgcolor='rgba(17,24,39,0.8)',
             height=600,
-            font=dict(family='Roboto', size=11, color='#34495e'),
-            title_font_size=16,
-            yaxis=dict(tickformat=".1f", title_font_size=12),
-            xaxis=dict(rangeslider_visible=False)
+            font=dict(family='Inter', size=12, color='#e2e8f0'),
+            title_font=dict(family='Inter', size=18, color='#f1f5f9'),
+            title_x=0.5,
+            yaxis=dict(
+                tickformat=".1f", 
+                title_font_size=14,
+                gridcolor='rgba(255,255,255,0.1)',
+                zerolinecolor='rgba(255,255,255,0.2)'
+            ),
+            xaxis=dict(
+                rangeslider_visible=False,
+                gridcolor='rgba(255,255,255,0.1)',
+                zerolinecolor='rgba(255,255,255,0.2)'
+            ),
+            margin=dict(l=50, r=50, t=80, b=50)
         )
         return fig, status
     except Exception as e:
@@ -182,30 +197,30 @@ def home():
             fig2.add_trace(go.Scatter(
                 x=hist.index,
                 y=hist['Close'],
-                name='Closing Price',
-                line=dict(color='#2A5CAA', width=2.5),
-                hovertemplate='Price: $%{y:.2f}<extra></extra>'
+                name='Precio de Cierre',
+                line=dict(color='#38bdf8', width=2.5),
+                hovertemplate='Precio: $%{y:.2f}<extra></extra>'
             ))
             
             # Líneas de bandas anuales
             fig2.add_trace(go.Scatter(
                 x=yearly_bands.index,
                 y=yearly_bands['Banda_Sobre'],
-                name='Overvalued',
+                name='Sobrevalorado',
                 mode='lines+markers',
-                line=dict(color='firebrick', dash='dot', width=2),
-                marker=dict(size=8, color='firebrick'),
-                hovertemplate='Year: %{x|%Y}<br>Band: $%{y:.2f}<extra></extra>'
+                line=dict(color='#f87171', dash='dot', width=2),
+                marker=dict(size=8, color='#f87171'),
+                hovertemplate='Año: %{x|%Y}<br>Banda: $%{y:.2f}<extra></extra>'
             ))
             
             fig2.add_trace(go.Scatter(
                 x=yearly_bands.index,
                 y=yearly_bands['Banda_Infra'],
-                name='Undervalued',
+                name='Infravalorado',
                 mode='lines+markers',
-                line=dict(color='green', dash='dot', width=2),
-                marker=dict(size=8, color='green'),
-                hovertemplate='Year: %{x|%Y}<br>Band: $%{y:.2f}<extra></extra>'
+                line=dict(color='#4ade80', dash='dot', width=2),
+                marker=dict(size=8, color='#4ade80'),
+                hovertemplate='Año: %{x|%Y}<br>Banda: $%{y:.2f}<extra></extra>'
             ))
             
             # Rellenar el área entre las bandas
@@ -213,9 +228,9 @@ def home():
                 x=yearly_bands.index.tolist() + yearly_bands.index[::-1].tolist(),
                 y=yearly_bands['Banda_Sobre'].tolist() + yearly_bands['Banda_Infra'][::-1].tolist(),
                 fill='toself',
-                fillcolor='rgba(189,195,199,0.2)',
+                fillcolor='rgba(99,102,241,0.15)',
                 line=dict(color='rgba(255,255,255,0)'),
-                name='Value Range',
+                name='Rango de Valoración',
                 hoverinfo='skip'
             ))
             
@@ -223,12 +238,12 @@ def home():
             current_price = hist['Close'].iloc[-1]
             fig2.add_hline(
                 y=current_price,
-                line_color='#FF7043',
+                line_color='#fbbf24',
                 line_dash='dash',
                 line_width=2,
-                annotation_text=f'Current Price: ${current_price:.2f}',
+                annotation_text=f'Precio Actual: ${current_price:.2f}',
                 annotation_position='bottom right',
-                annotation=dict(font_color='#455A64')
+                annotation=dict(font=dict(color='#fbbf24', size=12))
             )
             
             # Métricas clave
@@ -241,28 +256,39 @@ def home():
             )
             
             fig2.update_layout(
-                title=f"Weiss Analysis for {ticker.upper()}",
+                title=f"Análisis de Valoración - {ticker.upper()}",
+                title_font=dict(family='Inter', size=18, color='#f1f5f9'),
+                title_x=0.5,
+                plot_bgcolor='rgba(20,20,20,0.3)',
+                paper_bgcolor='rgba(17,24,39,0.8)',
                 xaxis=dict(
                     title='Fecha',
+                    title_font=dict(family='Inter', size=14, color='#e2e8f0'),
                     type='date',
                     dtick='M12',
                     tickformat='%Y',
-                    rangeslider_visible=False
+                    rangeslider_visible=False,
+                    gridcolor='rgba(255,255,255,0.1)',
+                    zerolinecolor='rgba(255,255,255,0.2)'
                 ),
                 yaxis=dict(
                     title='Precio (USD)',
+                    title_font=dict(family='Inter', size=14, color='#e2e8f0'),
                     tickformat='$,.2f',
-                    gridcolor='#dddddd'
+                    gridcolor='rgba(255,255,255,0.1)',
+                    zerolinecolor='rgba(255,255,255,0.2)'
                 ),
+                font=dict(family='Inter', size=12, color='#e2e8f0'),
                 hovermode='x unified',
-                template='plotly_white',
+                template='plotly_dark',
                 height=600,
                 legend=dict(
                     orientation="h",
                     yanchor="bottom",
                     y=1.02,
                     xanchor="left",
-                    x=0.01
+                    x=0.01,
+                    font=dict(size=12, color='#e2e8f0')
                 ),
                 margin=dict(l=50, r=50, t=80, b=50)
             )
@@ -276,12 +302,12 @@ def home():
                 y=0.95,
                 align='left',
                 showarrow=False,
-                bordercolor='#CCCCCC',
+                bordercolor='rgba(255,255,255,0.2)',
                 borderwidth=1,
-                borderpad=4,
-                bgcolor='white',
-                opacity=0.8,
-                font=dict(color="#455A64", size=12)
+                borderpad=8,
+                bgcolor='rgba(17,24,39,0.8)',
+                opacity=0.9,
+                font=dict(color="#e2e8f0", size=12, family='Inter')
             )
             
             return render_template('result.html',
